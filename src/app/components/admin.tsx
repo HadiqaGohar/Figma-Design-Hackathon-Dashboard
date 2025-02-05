@@ -27,7 +27,7 @@ interface Order {
     quantity: number
     price: number
     imageUrl: string
-  }[]
+  }[] 
 }
 
 interface Product {
@@ -66,6 +66,7 @@ export default function AdminPanel() {
     tags: [''],
     image: null as File | null
   })
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useEffect(() => {
     fetchOrders()
@@ -143,8 +144,8 @@ export default function AdminPanel() {
         price: parseFloat(newProduct.price),
         category: newProduct.category,
         dimensions: newProduct.dimensions,
-        features: newProduct.features.filter(f => f !== ''),
-        tags: newProduct.tags.filter(t => t !== ''),
+        features: newProduct.features.filter(f => f !== ''), 
+        tags: newProduct.tags.filter(t => t !== ''), 
       }
 
       if (newProduct.image) {
@@ -193,7 +194,7 @@ export default function AdminPanel() {
   return (
     <div className="flex min-h-screen bg-pink-50">
       {/* Sidebar */}
-      <div className="w-64 bg-white text-gray-700 shadow-lg rounded-r-2xl border-r border-gray-200">
+      <div className={`w-64 bg-white text-gray-700 shadow-lg rounded-r-2xl border-r border-gray-200 fixed sm:relative top-0 left-0 z-50 transition-transform transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} sm:translate-x-0`}>
         {/* Header */}
         <div className="p-6 bg-white shadow-sm rounded-2xl flex items-center gap-3">
           <div className="h-10 w-10 flex items-center justify-center bg-gray-100 rounded-full">
@@ -213,17 +214,15 @@ export default function AdminPanel() {
 
         {/* Navigation */}
         <nav className="mt-6 space-y-2">
-          {[
+          {[ 
             { name: 'Home', icon: HomeIcon, tab: 'home' },
             { name: 'Products', icon: CubeIcon, tab: 'products' },
             { name: 'Add Product', icon: PlusIcon, tab: 'addProduct' },
-            // { name: 'Orders', icon: ShoppingBagIcon, tab: 'orders' },
           ].map(({ name, icon: Icon, tab }) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`flex items-center w-full px-6 py-3 text-lg font-medium rounded-md transition-all ${activeTab === tab ? 'bg-gray-100 text-pink-600 font-semibold' : 'hover:bg-gray-50 text-gray-700'
-                }`}
+              className={`flex items-center w-full px-6 py-3 text-lg font-medium rounded-md transition-all ${activeTab === tab ? 'bg-gray-100 text-pink-600 font-semibold' : 'hover:bg-gray-50 text-gray-700'}`}
             >
               <Icon className="h-5 w-5 mr-3 text-pink-500" />
               {name}
@@ -234,7 +233,7 @@ export default function AdminPanel() {
         {/* Sign Out Button */}
         <div className="mt-6 px-6">
           <button
-            onClick={handleSignOut} // Add your sign-out function
+            onClick={handleSignOut}
             className="w-full flex items-center justify-center gap-2 px-6 py-3 text-lg font-medium text-white bg-pink-500 hover:bg-pink-600 rounded-md transition-all shadow-md"
           >
             <LogOutIcon className="h-5 w-5 text-white" />
@@ -243,15 +242,31 @@ export default function AdminPanel() {
         </div>
       </div>
 
+      {/* Mobile Sidebar Toggle Button */}
+      <button 
+        onClick={() => setSidebarOpen(!sidebarOpen)} 
+        className="sm:hidden absolute top-5 left-5 z-50 p-3 bg-pink-500 text-white rounded-full"
+      >
+        <svg
+          className="h-6 w-6"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3 12h18M3 6h18M3 18h18"></path>
+        </svg>
+      </button>
 
       {/* Main Content */}
-      <div className="flex-1 p-8 bg-white rounded-l-2xl">
+      <div className="flex-1 p-8 bg-white rounded-l-2xl sm:ml-64">
         {activeTab === 'home' && (
           <div>
             <h2 className="text-3xl font-semibold text-pink-600 mb-4">Dashboard Overview</h2>
             <StatisticsBox />
             <FurnitureAnalytics />
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mt-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
               {products.map((product) => (
                 <div key={product._id} className="bg-white shadow-xl rounded-lg p-6 border border-pink-200">
                   <img
@@ -270,7 +285,7 @@ export default function AdminPanel() {
         {activeTab === 'products' && (
           <div>
             <h2 className="text-3xl font-semibold text-pink-600 mb-4">Products</h2>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {products.map((product) => (
                 <div key={product._id} className="bg-white shadow-xl rounded-lg p-6 border border-pink-200">
                   <img
@@ -310,7 +325,7 @@ export default function AdminPanel() {
                 onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
                 className="w-full p-4 border border-pink-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
               />
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                 <input
                   type="number"
                   placeholder="Price"
@@ -328,49 +343,16 @@ export default function AdminPanel() {
               </div>
               <input
                 type="file"
-                accept="image/*"
                 onChange={(e) => setNewProduct({ ...newProduct, image: e.target.files ? e.target.files[0] : null })}
                 className="w-full p-4 border border-pink-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
               />
               <button
                 type="submit"
-                className="w-full py-3 text-white bg-pink-600 rounded-md hover:bg-pink-700"
+                className="w-full px-6 py-3 text-lg font-medium text-white bg-pink-500 hover:bg-pink-600 rounded-md transition-all"
               >
                 Add Product
               </button>
             </form>
-          </div>
-        )}
-
-        {activeTab === 'orders' && (
-          <div>
-            <h2 className="text-3xl font-semibold text-pink-600 mb-4">Orders</h2>
-            <div className="overflow-x-auto bg-white shadow-xl rounded-lg">
-              <table className="min-w-full text-left">
-                <thead className="bg-pink-600 text-white">
-                  <tr>
-                    <th className="px-4 py-3">Order ID</th>
-                    <th className="px-4 py-3">Customer</th>
-                    <th className="px-4 py-3">Total</th>
-                    <th className="px-4 py-3">Status</th>
-                    <th className="px-4 py-3">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders.map((order) => (
-                    <tr key={order._id} className="border-t">
-                      <td className="px-4 py-3">{order._id}</td>
-                      <td className="px-4 py-3">{order.name}</td>
-                      <td className="px-4 py-3">${order.total}</td>
-                      <td className="px-4 py-3">Pending</td>
-                      <td className="px-4 py-3">
-                        <button className="text-red-600 hover:text-red-700">Cancel</button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
           </div>
         )}
       </div>
