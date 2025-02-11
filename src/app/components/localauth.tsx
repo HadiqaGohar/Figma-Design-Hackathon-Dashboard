@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 interface LocalAuthProps {
+
+  
   onAuthenticated?: () => void;
 }
 
