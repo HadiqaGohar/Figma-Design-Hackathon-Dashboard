@@ -7,6 +7,7 @@ import toast from 'react-hot-toast'
 import FurnitureAnalytics from '../components/FurnitureAnalytics'
 import LocalAuth from '../components/localauth'
 import StatisticsBox from "../components/front"
+import SideNavbar from '../components/SideNavbar'
 
 interface Order {
   _id: string
@@ -46,8 +47,7 @@ interface Product {
 }
 
 export default function AdminPanel() {
-  const router = useRouter()
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+
   const [orders, setOrders] = useState<Order[]>([])
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
@@ -175,14 +175,7 @@ export default function AdminPanel() {
     }
   }
 
-  const handleSignOut = () => {
-    setIsAuthenticated(false)
-    router.push('/')
-  }
 
-  if (!isAuthenticated) {
-    return <LocalAuth onAuthenticated={() => setIsAuthenticated(true)} />
-  }
 
   if (loading) {
     return <div className="flex justify-center items-center h-screen">Loading...</div>
@@ -190,10 +183,11 @@ export default function AdminPanel() {
 
   return (
     <div className="flex  min-h-screen font-sans bg-[#29221d]">
-     {/* <SideNavbar/> */}
-
+      {/* <SideNavbar/> */}
+      <SideNavbar />
       {/* Main Content */}
-      <div className="flex-1 p-8 bg-[#29221d] rounded-l-2xl">
+      <div className=" sm:ml-[36%] md:ml-[30%] lg:ml-[23%] xl:ml-[18%] 2xl:ml-[15%] overflow-auto flex-1 p-8 bg-[#29221d] rounded-l-2xl">
+
         {activeTab === 'home' && (
           <div>
             <h2 className="text-3xl text-center font-semibold text-[#fe6c00] mb-4">Dashboard Overview</h2>

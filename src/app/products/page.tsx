@@ -5,6 +5,7 @@ import client from "../../sanity"
 import { TrashIcon } from "@heroicons/react/24/outline"
 import toast from "react-hot-toast"
 import Image from "next/image"
+import SideNavbar from "../components/SideNavbar"
 
 interface Product {
   _id: string // Changed from id to _id
@@ -65,7 +66,8 @@ function Products() {
 
   return (
     <div className="flex h-screen bg-gray-200">
-    <div className="flex-1 p-6 overflow-auto">
+      <SideNavbar/>
+    <div className="sm:ml-[36%] md:ml-[30%] lg:ml-[23%] xl:ml-[18%] 2xl:ml-[15%] flex-1 p-6 overflow-auto">
       <h2 className="text-3xl font-semibold text-gray-800 mb-4 text-center">All Products</h2>
   
       {loading ? (
@@ -73,11 +75,11 @@ function Products() {
       ) : products.length === 0 ? (
         <p className="text-center text-gray-600">No products found.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {products.map((product) => (
             <div
               key={product._id}
-              className="bg-gray-100 shadow-md rounded-lg p-4 border border-gray-400"
+              className="bg-gray-100 shadow-md rounded-lg p-4 border border-gray-400 "
             >
               <Image
                 src={product.image?.asset?.url || "/placeholder.jpg"}
@@ -86,10 +88,10 @@ function Products() {
                 width={200}
                 className="w-full h-48 object-cover rounded-lg mb-4"
               />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
+              <h3 className="text-md xl:text-lg font-medium text-gray-900 mb-2">
                 {product.name}
               </h3>
-              <p className="text-gray-700 mb-4">${product.price.toFixed(2)}</p>
+              <p className="text-xs md:text-sm text-gray-700 mb-4">${product.price.toFixed(2)}</p>
               <button
                 onClick={() => deleteProduct(product._id)}
                 className="flex items-center justify-center gap-2 px-4 py-2 text-white bg-[#fe6c00] hover:bg-orange-400 rounded-md"

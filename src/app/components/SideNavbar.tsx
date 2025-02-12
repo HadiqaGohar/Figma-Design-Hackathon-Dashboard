@@ -33,7 +33,7 @@ function SideNavbar() {
       >
         {/* Header */}
         <div className="p-4 flex items-center gap-3">
-          <div className="h-10 w-10 rounded-full overflow-hidden">
+          <div className="h-10 w-10 mt-20 md:mt-0 rounded-full overflow-hidden">
             <Image
               src="/doll.jpeg"
               alt="Profile"
@@ -42,13 +42,13 @@ function SideNavbar() {
               className="h-full w-full object-cover"
             />
           </div>
-          <h1 className="text-lg font-normal text-white">Hadiqa-Gohar</h1>
+          <h1 className="text-lg mt-20 md:mt-0 font-normal text-white">Hadiqa-Gohar</h1>
         </div>
 
         {/* Navigation */}
         <nav className="mt-2 space-y-2 p-2 font-light">
           {[
-            { name: 'Home', icon: HomeIcon, path: '/' },
+            { name: 'Home', icon: HomeIcon, path: '/admin' },
             { name: 'Products', icon: CubeIcon, path: '/products' },
             { name: 'Add Product', icon: PlusIcon, path: '/addProducts' },
             { name: 'Orders', icon: ShoppingCart, path: '/order' },

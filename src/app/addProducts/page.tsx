@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import client from '../../sanity'
 import toast from 'react-hot-toast'
 import LocalAuth from '../components/localauth'
+import SideNavbar from '../components/SideNavbar'
 
 interface Order {
     _id: string
@@ -132,7 +133,7 @@ function AddProduct() {
     const handleAddProduct = async (e: React.FormEvent) => {
         e.preventDefault();
         console.log("Adding product..."); // Debugging
-    
+
         try {
             const doc: any = {
                 _type: 'product',
@@ -144,9 +145,9 @@ function AddProduct() {
                 features: newProduct.features.filter(f => f !== ''),
                 tags: newProduct.tags.filter(t => t !== ''),
             };
-    
+
             console.log("Product Data Before Upload:", doc);
-    
+
             if (newProduct.image) {
                 console.log("Uploading image...");
                 const imageAsset = await client.assets.upload('image', newProduct.image);
@@ -158,10 +159,10 @@ function AddProduct() {
                     }
                 };
             }
-    
+
             const result = await client.create(doc);
             console.log("Product Added:", result);
-    
+
             toast.success('Product added successfully');
             setShowAddProduct(false);
             setNewProduct({
@@ -174,7 +175,7 @@ function AddProduct() {
                 tags: [''],
                 image: null
             });
-    
+
             fetchProducts();
         } catch (error) {
             console.error("Error adding product:", error);
@@ -185,7 +186,7 @@ function AddProduct() {
             }
         }
     };
-    
+
 
     // const handleSignOut = () => {
     //     setIsAuthenticated(false)
@@ -202,54 +203,55 @@ function AddProduct() {
 
     return (
         <div className="bg-gradient-to-br from-[#f3d2aa] to-[#e2a478] bg-opacity-90 min-h-screen flex items-center justify-center p-6">
-  <div className="max-w-screen-lg w-full bg-white/70 backdrop-blur-md shadow-xl rounded-lg p-10">
-    <h2 className="text-3xl font-bold text-center text-gray-700 mb-10 uppercase">Add Products</h2>
+            <SideNavbar/>
+            <div className="sm:ml-[36%] md:ml-[33%] lg:ml-[24%] xl:ml-[18%] 2xl:ml-[15%] overflow-hidden flex-1 max-w-screen-lg w-full bg-white/70 backdrop-blur-md shadow-xl rounded-lg p-10">
+                <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-700 mb-10 uppercase">Add Products</h2>
 
-    <form onSubmit={handleAddProduct} className="space-y-6">
-      <input
-        type="text"
-        placeholder="Product Name"
-        value={newProduct.name}
-        onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-        className="w-full p-4 border bg-white/60 border-[#FF7800] text-black rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7800]"
-      />
-      <textarea
-        placeholder="Product Description"
-        value={newProduct.description}
-        onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
-        className="w-full p-4 border bg-white/60 border-[#FF7800] text-black rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7800]"
-      />
-      <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-        <input
-          type="number"
-          placeholder="Price"
-          value={newProduct.price}
-          onChange={(e) => setNewProduct({ ...newProduct, price: Number(e.target.value) })}
-          className="w-full p-4 border bg-white/60 border-[#FF7800] text-black rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7800]"
-        />
-        <input
-          type="text"
-          placeholder="Category"
-          value={newProduct.category}
-          onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
-          className="w-full p-4 border bg-white/60 border-[#FF7800] text-black rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7800]"
-        />
-      </div>
-      <input
-        type="file"
-        onChange={(e) => setNewProduct({ ...newProduct, image: e.target.files ? e.target.files[0] : null })}
-        className="w-full p-4 border bg-white/60 border-[#FF7800] text-black rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7800]"
-      />
-      <button
-        type="submit"
-        className="w-full px-6 py-3 text-lg font-medium text-white bg-[#FF7800] hover:bg-[#E86C1A] rounded-md transition-all shadow-lg"
-      >
-        Add Product
-      </button>
-    </form>
-  </div>
-</div>
-      
+                <form onSubmit={handleAddProduct} className="space-y-6">
+                    <input
+                        type="text"
+                        placeholder="Product Name"
+                        value={newProduct.name}
+                        onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+                        className="w-full p-4 border bg-white/60 border-[#FF7800] text-black rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7800]"
+                    />
+                    <textarea
+                        placeholder="Product Description"
+                        value={newProduct.description}
+                        onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+                        className="w-full p-4 border bg-white/60 border-[#FF7800] text-black rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7800]"
+                    />
+                    <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <input
+                            type="number"
+                            placeholder="Price"
+                            value={newProduct.price}
+                            onChange={(e) => setNewProduct({ ...newProduct, price: Number(e.target.value) })}
+                            className="w-full p-4 border bg-white/60 border-[#FF7800] text-black rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7800]"
+                        />
+                        <input
+                            type="text"
+                            placeholder="Category"
+                            value={newProduct.category}
+                            onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
+                            className="w-full p-4 border bg-white/60 border-[#FF7800] text-black rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7800]"
+                        />
+                    </div>
+                    <input
+                        type="file"
+                        onChange={(e) => setNewProduct({ ...newProduct, image: e.target.files ? e.target.files[0] : null })}
+                        className="w-full p-4 border bg-white/60 border-[#FF7800] text-black rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7800]"
+                    />
+                    <button
+                        type="submit"
+                        className="w-full px-6 py-3 text-lg font-medium text-white bg-[#FF7800] hover:bg-[#E86C1A] rounded-md transition-all shadow-lg"
+                    >
+                        Add Product
+                    </button>
+                </form>
+            </div>
+        </div>
+
     )
 }
 

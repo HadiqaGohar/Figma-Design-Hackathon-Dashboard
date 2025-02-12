@@ -50,12 +50,7 @@ const order = {
       type: "string",
     },
    
-    // {
-    //   name: "cartItems",
-    //   title: "Cart Items",
-    //   type: "array",
-    //   of: [{ type: "reference", to: { type: "product" } }],
-    // },
+    
     {
       title: "Cart Items",
       name: "cartItems",
@@ -66,8 +61,7 @@ const order = {
         
       ]}]
     },
-    
- 
+  
     {
       name: "status",
       title: "Order Status",
@@ -92,11 +86,7 @@ const order = {
       type: 'number',
       title: 'Product ID',
     },
-    // {
-    //   name: "image",
-    //   title: "Image",
-    //   type: "string",
-    // },
+   
     {
       title: "Image",
       name: 'image',

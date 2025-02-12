@@ -4,9 +4,9 @@ import ProtectedRoute from '@/app/components/ProtectedRoute';
 import { client } from '@/sanity/lib/client';
 import imageUrlBuilder from '@sanity/image-url';
 import { SanityImageSource } from '@sanity/image-url/lib/types/types';
-import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
+import SideNavbar from '../components/SideNavbar';
 
 const builder = imageUrlBuilder(client);
 
@@ -36,6 +36,9 @@ interface Order {
     subtotal: number;
     status: string;
     cartItems: CartItem[];
+    image: string;
+    id: number;
+    productName: string;
 }
 
 function AdminDashboard() {
@@ -43,7 +46,6 @@ function AdminDashboard() {
     const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
     const [filter, setFilter] = useState("All");
 
-    // ✅ **Fetch orders from Sanity**
     useEffect(() => {
         client.fetch(`
             *[_type == "order"]{
@@ -61,58 +63,25 @@ function AdminDashboard() {
                 shippingPrice,
                 subtotal,
                 status,
-                cartItems
+                cartItems,
+                image,
+                id,
+                productName,
             }
         `)
             .then((data) => setOrders(data))
             .catch((error) => console.error("Error fetching orders:", error));
     }, []);
 
-    // ✅ **Update order status**
-    const updateOrderStatus = (orderId: string, newStatus: string) => {
-        setOrders((prevOrders) =>
-            prevOrders.map((order) =>
-                order._id === orderId ? { ...order, status: newStatus } : order
-            )
-        );
-
-        client
-            .patch(orderId)
-            .set({ status: newStatus })
-            .commit()
-            .then(() => Swal.fire("Updated!", "Order status updated successfully", "success"))
-            .catch((error) => console.error("Error updating status:", error));
+    const toggleDropdown = (orderId: string) => {
+        setSelectedOrderId(selectedOrderId === orderId ? null : orderId);
     };
-
-    // ✅ **Delete order**
-    const deleteOrder = (orderId: string) => {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6",
-            confirmButtonText: "Yes, delete it!",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                client
-                    .delete(orderId)
-                    .then(() => {
-                        setOrders((prevOrders) => prevOrders.filter(order => order._id !== orderId));
-                        Swal.fire("Deleted!", "Order has been deleted.", "success");
-                    })
-                    .catch((error) => console.error("Error deleting order:", error));
-            }
-        });
-    };
-
-    const filteredOrders = filter === "All" ? orders : orders.filter((order) => order.status === filter);
 
     return (
         <ProtectedRoute>
             <div className='flex flex-col h-screen bg-[#D2B48C] text-black'>
-                <div className='flex-1 p-6 overflow-y-auto'>
+                <SideNavbar />
+                <div className='sm:ml-[36%] md:ml-[30%] lg:ml-[23%] xl:ml-[18%] 2xl:ml-[15%] flex-1 overflow-auto p-6 overflow-y-auto'>
                     <h2 className='text-3xl font-bold text-center text-black mb-2 mt-6 uppercase'>Orders</h2>
 
                     {/* ✅ **Filter Orders by Status** */}
@@ -131,7 +100,7 @@ function AdminDashboard() {
                     </div>
 
                     <div className='overflow-hidden bg-[#E5C1A1] rounded-xl shadow-lg p-4'>
-                        <table className="w-full border-collapse text-black">
+                        <table className="text-xs w-full border-collapse text-black">
                             <thead>
                                 <tr className="bg-[#8B5A2B] text-[#ff9f2a]">
                                     <th className="p-3 border">ID</th>
@@ -140,68 +109,58 @@ function AdminDashboard() {
                                     <th className="p-3 border">City</th>
                                     <th className="p-3 border">Total</th>
                                     <th className="p-3 border">Status</th>
-                                    <th className="p-3 border">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredOrders.map((order) => (
-                                    <React.Fragment key={order._id}>
-                                        <tr className="cursor-pointer hover:bg-[#FFA54F] transition-all border-b">
-                                            <td className="p-3 border">{order._id}</td>
-                                            <td className="p-3 border">{order.firstName} {order.lastName}</td>
-                                            <td className="p-3 border">{order.country}</td>
-                                            <td className="p-3 border">{order.city}</td>
-                                            <td className="p-3 border">${order.totalPrice}</td>
-                                            <td className="p-3 border">
-                                                <select
-                                                    value={order.status || ""}
-                                                    onChange={(e) => updateOrderStatus(order._id, e.target.value)}
-                                                    className="p-2 border rounded-lg bg-[#A67B5B] text-white font-bold"
-                                                >
-                                                    <option value="pending">Pending</option>
-                                                    <option value="success">Success</option>
-                                                    <option value="dispatch">Dispatch</option>
-                                                </select>
-                                            </td>
-                                            <td className="p-3 border">
-                                                <button
-                                                    onClick={() => deleteOrder(order._id)}
-                                                    className="bg-[#A67B5B] text-white px-3 py-1 rounded-md hover:bg-red-700 transition"
-                                                >
-                                                    Delete
-                                                </button>
-                                            </td>
-                                        </tr>
-
-                                        {/* ✅ **Order Details** */}
-                                        {selectedOrderId === order._id && (
-                                            <tr>
-                                                <td colSpan={7} className="p-4 border bg-[#8B5A2B]">
-                                                    <h3 className="text-lg font-semibold text-[#FF8C00]">Order Details</h3>
-                                                    <p><strong>Phone:</strong> {order.phone}</p>
-                                                    <p><strong>Email:</strong> {order.email}</p>
-                                                    <p><strong>Street:</strong> {order.street}</p>
-                                                    <p><strong>City:</strong> {order.city}</p>
-                                                    <p><strong>Postal Code:</strong> {order.postalCode}</p>
-                                                    <ul className="mt-2">
-                                                        {order.cartItems.map((item, index) => (
-                                                            <li key={`${order._id}-${index}`} className="flex items-center space-x-4 p-2">
-                                                                <span>{item.product} (Qty: {item.quantity})</span>
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                </td>
+                                {orders
+                                    .filter(order => filter === "All" || order.status.toLowerCase() === filter.toLowerCase()) // ✅ Apply filter
+                                    .map((order) => (
+                                        <React.Fragment key={order._id}>
+                                            <tr className="text-xs md:text-sm cursor-pointer hover:bg-[#FFA54F] transition-all border-b" onClick={() => toggleDropdown(order._id)}>
+                                                <td className="p-3 border">{order._id}</td>
+                                                <td className="p-3 border">{order.firstName} {order.lastName}</td>
+                                                <td className="p-3 border">{order.country}</td>
+                                                <td className="p-3 border">{order.city}</td>
+                                                <td className="p-3 border">${order.totalPrice}</td>
+                                                <td className="p-3 border">{order.status}</td>
                                             </tr>
-                                        )}
-                                    </React.Fragment>
-                                ))}
+                                            {selectedOrderId === order._id && (
+                                                <tr>
+                                                    <td colSpan={6} className="p-4 border bg-[#8B5A2B] text-white">
+                                                        <h3 className="text-lg font-semibold">Order Details</h3>
+                                                        <p><strong>Phone:</strong> {order.phone}</p>
+                                                        <p><strong>Email:</strong> {order.email}</p>
+                                                        <p><strong>Street:</strong> {order.street}</p>
+                                                        <p><strong>Postal Code:</strong> {order.postalCode}</p>
+                                                        <p><strong>Image Address:</strong> {order.image}</p>
+                                                        <p><strong>Id:</strong> {order.id}</p>
+                                                        <p><strong>Subtotal:</strong> {order.subtotal}</p>
+                                                        <p><strong>Shipping:</strong> {order.shippingPrice}</p>
+                                                        <p><strong>Total:</strong> {order.totalPrice}</p>
+                                                        {/*  */}
+                                                        <p><strong>First Name:</strong> {order.firstName}</p>
+                                                        <p><strong>Last Name:</strong> {order.lastName}</p>
+                                                        <p><strong>Country:</strong> {order.country}</p>
+                                                        <p><strong>City:</strong> {order.city}</p>
+                                                        {/* <p><strong>Total:</strong> {order.totalPrice}</p> */}
+                                                        <p><strong>Status:</strong> {order.status}</p>
+                                                        <ul className="mt-2">
+                                                            {order.cartItems.map((item, index) => (
+                                                                <li key={index} className="p-2">{item.product} (Qty: {item.quantity})</li>
+                                                            ))}
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                            )}
+                                        </React.Fragment>
+                                    ))}
                             </tbody>
+
                         </table>
                     </div>
                 </div>
             </div>
         </ProtectedRoute>
-
     );
 }
 

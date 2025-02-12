@@ -29,7 +29,7 @@ const LocalAuth: React.FC<LocalAuthProps> = ({ onAuthenticated }) => {
         onAuthenticated();
       }
       try {
-        await router.push('');
+        await router.push('/admin');
       } catch (error) {
         window.location.href = '';
       }
