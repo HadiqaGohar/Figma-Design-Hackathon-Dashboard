@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { LogOutIcon, ShoppingCart } from 'lucide-react'
-import { HomeIcon, CubeIcon, PlusIcon, ClockIcon, TruckIcon, CheckIcon, PaperAirplaneIcon, CreditCardIcon, UserIcon, CogIcon } from '@heroicons/react/24/outline'
+import { HomeIcon, CubeIcon, PlusIcon, ClockIcon, TruckIcon, CheckIcon, CreditCardIcon } from '@heroicons/react/24/outline'
 
 function SideNavbar() {
   const router = useRouter()
@@ -16,13 +16,31 @@ function SideNavbar() {
   }
 
   return (
-    <div>
+    <>
+      {/* Overlay for Mobile Sidebar */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 sm:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <div className={`w-64 bg-[#29221d] text-white shadow-lg border-r fixed h-full top-0 left-0 z-50 transition-transform transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} sm:translate-x-0`}>
+      <div
+        className={`fixed top-0 left-0 z-50 h-full w-64 bg-[#29221d] text-white shadow-lg border-r transform transition-transform ease-in-out duration-300 ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        } sm:translate-x-0`}
+      >
         {/* Header */}
         <div className="p-4 flex items-center gap-3">
           <div className="h-10 w-10 rounded-full overflow-hidden">
-            <Image src="/doll.jpeg" alt="Profile" height={50} width={50} className="h-full w-full object-cover" />
+            <Image
+              src="/doll.jpeg"
+              alt="Profile"
+              height={50}
+              width={50}
+              className="h-full w-full object-cover"
+            />
           </div>
           <h1 className="text-lg font-normal text-white">Hadiqa-Gohar</h1>
         </div>
@@ -37,19 +55,19 @@ function SideNavbar() {
             { name: 'Pending', icon: ClockIcon, path: '/order/pending' },
             { name: 'Success', icon: CheckIcon, path: '/order/success' },
             { name: 'Dispatch', icon: TruckIcon, path: '/order/dispatch' },
-            // { name: 'Transactions', icon: PaperAirplaneIcon, path: '/transactions' },
             { name: 'Subscriptions', icon: CreditCardIcon, path: '/subscriptions' },
-            // { name: 'Account', icon: UserIcon, path: '/account' },
-            // { name: 'Settings', icon: CogIcon, path: '/settings' },
           ].map(({ name, icon: Icon, path }) => (
-            <Link key={path} href={path} className="flex items-center w-full px-6 py-3 text-lg font-medium rounded-md transition-all hover:bg-gray-700">
+            <Link
+              key={path}
+              href={path}
+              className="flex items-center w-full px-6 py-3 text-lg font-medium rounded-md transition-all hover:bg-gray-700"
+            >
               <Icon className="h-5 w-5 mr-3 text-gray-400" />
               {name}
             </Link>
           ))}
         </nav>
 
-        {/* Sign Out Button */}
         {/* Sign Out Button */}
         <div className="absolute bottom-6 w-full px-6">
           <button
@@ -60,17 +78,16 @@ function SideNavbar() {
             Sign Out
           </button>
         </div>
-
       </div>
 
       {/* Mobile Sidebar Toggle Button */}
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="sm:hidden fixed top-5 left-5 z-50 p-3 bg-[#fe6c00] text-white rounded-full"
+        className="sm:hidden fixed top-5 left-5 z-50 p-3 bg-[#fe6c00] text-white rounded-full focus:outline-none"
       >
         ☰
       </button>
-    </div>
+    </>
   )
 }
 

@@ -96,7 +96,7 @@ const StatisticsBox = () => {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 p-6 bg-[#191414]">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-6 bg-[#191414]">
       {/* Products */}
       <div className="bg-[#26221f] rounded-2xl shadow-lg p-6 flex items-center gap-4 border border-[#fe6c00]">
         <div className="h-12 w-12 flex items-center justify-center bg-[#fe6c00] rounded-full">

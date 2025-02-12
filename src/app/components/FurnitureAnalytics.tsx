@@ -16,7 +16,7 @@ export default function AnalyticsGraph() {
   return (
     <div className="w-full mx-auto p-6 bg-black shadow-lg  border border-gray-800 text-white">
       <h2 className="text-2xl font-bold mb-4 text-center text-orange-400">Financial Dashboard</h2>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div className="p-4 bg-gray-900 rounded-lg">
           <h3 className="text-lg font-semibold">Balance</h3>
           <p className="text-2xl font-bold">$22,000</p>

@@ -23,7 +23,7 @@ export default function RootLayout({
       <SideNavbar />
 
       {/* Main Content */}
-      <main className="flex-1 ml-[13%] overflow-auto">{children}</main>
+      <main className="flex-1 sm:ml-[36%] md:ml-[25%] lg:ml-[20%] xl:ml-[13%] overflow-auto">{children}</main>
     </body>
   </html>
   );

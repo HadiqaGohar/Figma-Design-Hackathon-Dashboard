@@ -111,83 +111,97 @@ function Dispatch() {
 
     return (
         <ProtectedRoute>
-            <div className='flex flex-col h-screen bg-gray-400 text-white'>
-                <div className='flex-1 p-6 overflow-y-auto'>
-                    <h2 className='text-3xl font-bold text-center text-black mb-6 uppercase'>Dispatch Orders</h2>
+        <div className='flex flex-col h-screen bg-[#D2B48C] text-black'>
+            <div className='flex-1 p-6 overflow-y-auto'>
+                <h2 className='text-3xl font-bold text-center text-black mb-2 mt-6 uppercase'>Dispatch Orders</h2>
 
-                    
+                {/* ✅ **Filter Orders by Status** */}
+                {/* <div className="mb-4 text-black">
+                    <label className="mr-2">Filter:</label>
+                    <select
+                        value={filter}
+                        onChange={(e) => setFilter(e.target.value)}
+                        className="p-2 border rounded-lg bg-[#A67B5B] text-white"
+                    >
+                        <option value="All">All</option>
+                        <option value="pending">Pending</option>
+                        <option value="success">Success</option>
+                        <option value="dispatch">Dispatch</option>
+                    </select>
+                </div> */}
 
-                    <div className='overflow-hidden bg-gray-500 rounded-xl shadow-lg p-4'>
-                        <table className="w-full border-collapse text-white">
-                            <thead>
-                                <tr className="bg-[#2C211F] text-[#FF7800]">
-                                    <th className="p-3 border">ID</th>
-                                    <th className="p-3 border">Customer</th>
-                                    <th className="p-3 border">Country</th>
-                                    <th className="p-3 border">City</th>
-                                    <th className="p-3 border">Total</th>
-                                    <th className="p-3 border">Status</th>
-                                    <th className="p-3 border">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredOrders.map((order) => (
-                                    <React.Fragment key={order._id}>
-                                        <tr className="cursor-pointer hover:bg-[#FF7800] transition-all border-b">
-                                            <td className="p-3 border">{order._id}</td>
-                                            <td className="p-3 border">{order.firstName} {order.lastName}</td>
-                                            <td className="p-3 border">{order.country}</td>
-                                            <td className="p-3 border">{order.city}</td>
-                                            <td className="p-3 border">${order.totalPrice}</td>
-                                            <td className="p-3 border">
-                                                <select
-                                                    value={order.status || ""}
-                                                    onChange={(e) => updateOrderStatus(order._id, e.target.value)}
-                                                    className="p-2 border rounded-lg bg-[#2C211F] text-orange-400 font-bold"
-                                                >
-                                                    <option value="pending">Pending</option>
-                                                    <option value="success">Success</option>
-                                                    <option value="dispatch">Dispatch</option>
-                                                </select>
-                                            </td>
-                                            <td className="p-3 border">
-                                                <button
-                                                    onClick={() => deleteOrder(order._id)}
-                                                    className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-700 transition"
-                                                >
-                                                    Delete
-                                                </button>
+                <div className='overflow-hidden bg-[#E5C1A1] rounded-xl shadow-lg p-4'>
+                    <table className="w-full border-collapse text-black">
+                        <thead>
+                            <tr className="bg-[#8B5A2B] text-[#ff9f2a]">
+                                <th className="p-3 border">ID</th>
+                                <th className="p-3 border">Customer</th>
+                                <th className="p-3 border">Country</th>
+                                <th className="p-3 border">City</th>
+                                <th className="p-3 border">Total</th>
+                                <th className="p-3 border">Status</th>
+                                <th className="p-3 border">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredOrders.map((order) => (
+                                <React.Fragment key={order._id}>
+                                    <tr className="cursor-pointer hover:bg-[#FFA54F] transition-all border-b">
+                                        <td className="p-3 border">{order._id}</td>
+                                        <td className="p-3 border">{order.firstName} {order.lastName}</td>
+                                        <td className="p-3 border">{order.country}</td>
+                                        <td className="p-3 border">{order.city}</td>
+                                        <td className="p-3 border">${order.totalPrice}</td>
+                                        <td className="p-3 border">
+                                            <select
+                                                value={order.status || ""}
+                                                onChange={(e) => updateOrderStatus(order._id, e.target.value)}
+                                                className="p-2 border rounded-lg bg-[#A67B5B] text-white font-bold"
+                                            >
+                                                <option value="pending">Pending</option>
+                                                <option value="success">Success</option>
+                                                <option value="dispatch">Dispatch</option>
+                                            </select>
+                                        </td>
+                                        <td className="p-3 border">
+                                            <button
+                                                onClick={() => deleteOrder(order._id)}
+                                                className="bg-[#A67B5B] text-white px-3 py-1 rounded-md hover:bg-red-700 transition"
+                                            >
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    {/* ✅ **Order Details** */}
+                                    {selectedOrderId === order._id && (
+                                        <tr>
+                                            <td colSpan={7} className="p-4 border bg-[#8B5A2B]">
+                                                <h3 className="text-lg font-semibold text-[#FF8C00]">Order Details</h3>
+                                                <p><strong>Phone:</strong> {order.phone}</p>
+                                                <p><strong>Email:</strong> {order.email}</p>
+                                                <p><strong>Street:</strong> {order.street}</p>
+                                                <p><strong>City:</strong> {order.city}</p>
+                                                <p><strong>Postal Code:</strong> {order.postalCode}</p>
+                                                <ul className="mt-2">
+                                                    {order.cartItems.map((item, index) => (
+                                                        <li key={`${order._id}-${index}`} className="flex items-center space-x-4 p-2">
+                                                            <span>{item.product} (Qty: {item.quantity})</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
                                             </td>
                                         </tr>
-
-                                        {/* ✅ **Order Details** */}
-                                        {selectedOrderId === order._id && (
-                                            <tr>
-                                                <td colSpan={7} className="p-4 border bg-[#2C211F]">
-                                                    <h3 className="text-lg font-semibold text-[#FF7800]">Order Details</h3>
-                                                    <p><strong>Phone:</strong> {order.phone}</p>
-                                                    <p><strong>Email:</strong> {order.email}</p>
-                                                    <p><strong>Street:</strong> {order.street}</p>
-                                                    <p><strong>City:</strong> {order.city}</p>
-                                                    <p><strong>Postal Code:</strong> {order.postalCode}</p>
-                                                    <ul className="mt-2">
-                                                        {order.cartItems.map((item, index) => (
-                                                            <li key={`${order._id}-${index}`} className="flex items-center space-x-4 p-2">
-                                                                <span>{item.product} (Qty: {item.quantity})</span>
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                </td>
-                                            </tr>
-                                        )}
-                                    </React.Fragment>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                    )}
+                                </React.Fragment>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </ProtectedRoute>
+        </div>
+    </ProtectedRoute>
+
     );
 }
 

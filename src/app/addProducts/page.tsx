@@ -44,8 +44,8 @@ interface Product {
 }
 
 function AddProduct() {
-    const router = useRouter()
-    const [isAuthenticated, setIsAuthenticated] = useState(false)
+    // const router = useRouter()
+    // const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [orders, setOrders] = useState<Order[]>([])
     const [products, setProducts] = useState<Product[]>([])
     const [loading, setLoading] = useState(true)
@@ -187,67 +187,69 @@ function AddProduct() {
     };
     
 
-    const handleSignOut = () => {
-        setIsAuthenticated(false)
-        router.push('/')
-    }
+    // const handleSignOut = () => {
+    //     setIsAuthenticated(false)
+    //     router.push('/')
+    // }
 
-    if (!isAuthenticated) {
-        return <LocalAuth onAuthenticated={() => setIsAuthenticated(true)} />
-    }
+    // if (!isAuthenticated) {
+    //     return <LocalAuth onAuthenticated={() => setIsAuthenticated(true)} />
+    // }
 
     if (loading) {
         return <div className="flex justify-center items-center h-screen">Loading...</div>
     }
 
     return (
-        <div>
-            <div className='ml-28 max-w-screen-xl mx-auto my-10'>
-                <h2 className="text-3xl font-semibold text-[#fe6c00] mb-4">Add Product</h2>
-                <form onSubmit={handleAddProduct} className="space-y-6">
-                    <input
-                        type="text"
-                        placeholder="Product Name"
-                        value={newProduct.name}
-                        onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-                        className="w-full p-4 border-4 bg-gray-200 border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    />
-                    <textarea
-                        placeholder="Product Description"
-                        value={newProduct.description}
-                        onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
-                        className="w-full p-4 border-4 bg-gray-200 border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    />
-                    <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                        <input
-                            type="number"
-                            placeholder="Price"
-                            value={newProduct.price}
-                            onChange={(e) => setNewProduct({ ...newProduct, price: Number(e.target.value) })}
-                            className="w-full p-4 bg-gray-200 border-4 border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        />
-                        <input
-                            type="text"
-                            placeholder="Category"
-                            value={newProduct.category}
-                            onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
-                            className="w-full p-4 bg-gray-200 border-4 border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        />
-                    </div>
-                    <input
-                        type="file"
-                        onChange={(e) => setNewProduct({ ...newProduct, image: e.target.files ? e.target.files[0] : null })}
-                        className="w-full p-4 bg-gray-200 border-4 border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    />
-                    <button
-                        type="submit"
-                        className="w-full px-6 py-3 text-lg font-medium text-white bg-orange-500 hover:bg-orange-600 rounded-md transition-all"
-                    >
-                        Add Product
-                    </button>
-                </form>
-            </div>
-        </div>
+        <div className="bg-gradient-to-br from-[#f3d2aa] to-[#e2a478] bg-opacity-90 min-h-screen flex items-center justify-center p-6">
+  <div className="max-w-screen-lg w-full bg-white/70 backdrop-blur-md shadow-xl rounded-lg p-10">
+    <h2 className="text-3xl font-bold text-center text-gray-700 mb-10 uppercase">Add Products</h2>
+
+    <form onSubmit={handleAddProduct} className="space-y-6">
+      <input
+        type="text"
+        placeholder="Product Name"
+        value={newProduct.name}
+        onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+        className="w-full p-4 border bg-white/60 border-[#FF7800] text-black rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7800]"
+      />
+      <textarea
+        placeholder="Product Description"
+        value={newProduct.description}
+        onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+        className="w-full p-4 border bg-white/60 border-[#FF7800] text-black rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7800]"
+      />
+      <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+        <input
+          type="number"
+          placeholder="Price"
+          value={newProduct.price}
+          onChange={(e) => setNewProduct({ ...newProduct, price: Number(e.target.value) })}
+          className="w-full p-4 border bg-white/60 border-[#FF7800] text-black rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7800]"
+        />
+        <input
+          type="text"
+          placeholder="Category"
+          value={newProduct.category}
+          onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
+          className="w-full p-4 border bg-white/60 border-[#FF7800] text-black rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7800]"
+        />
+      </div>
+      <input
+        type="file"
+        onChange={(e) => setNewProduct({ ...newProduct, image: e.target.files ? e.target.files[0] : null })}
+        className="w-full p-4 border bg-white/60 border-[#FF7800] text-black rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7800]"
+      />
+      <button
+        type="submit"
+        className="w-full px-6 py-3 text-lg font-medium text-white bg-[#FF7800] hover:bg-[#E86C1A] rounded-md transition-all shadow-lg"
+      >
+        Add Product
+      </button>
+    </form>
+  </div>
+</div>
+      
     )
 }
 
